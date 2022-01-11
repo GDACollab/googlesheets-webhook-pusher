@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+      function returnError(error){
+        alert(error + "\n\nHave you tried logging out of all google drive accounts but one?");
+      }
+      google.script.run.withFailureHandler(returnError).getConfigProperties();
+
+      function initForm(data){
+        if (data.webhook){
+          document.getElementById("webhooks").value = data.webhook;
+        }
+      }
+      google.script.run.withSuccessHandler(initForm).getConfigProperties();
+
+      function saveChanges(){
+        var dataToChange = {};
+        dataToChange.webhook = document.getElementById("webhooks").value;
+        // Pretty simple regex to match a discord webhook URL.
+        var url_regex = /https:\/\/\w+.\w+\/api\/webhooks\//;
+        if (!dataToChange.webhook.match(url_regex)){
+          alert("No valid webhook URL detected. Changes not saved. Must match regex: " + url_regex);
+          return;
+        }
+
+        google.script.run.setConfigProperties(dataToChange);
+        alert("Changes saved!");
+      }
+
+      function resetNotifications(){
+        google.script.run.resetNotifications();
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Asset Management Config</h2>
+    <p>
+    Webhook URLs (Separate by comma)
+    <textarea id="webhooks" rows="10" cols="30"></textarea>
+    </p>
+    <p><button onclick="saveChanges()">Save Changes</button></p>
+    <p><button onclick="resetNotifications()">Reset Webhook Notifications and Resend</button></p>
+  </body>
+</html>
