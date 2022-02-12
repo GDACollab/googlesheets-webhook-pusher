@@ -67,7 +67,6 @@ class SheetData {
 
     // We also need to set the differences once we're done counting them:
     var newDiffProp = {};
-
     // We get the currently stored data for this range, and we can use that to sift for differences:
     var diffProp = JSON.parse(props.getProperty("WebhookTracker_" + rangeName));
     for (var objId in diffObj.obj) { // Look at all the objects currently written in the spreadsheet.
@@ -80,7 +79,7 @@ class SheetData {
       } else {
         for (var key in object){
           var value = object[key];
-          if(value != diffProp[objId][key]){ // We have a difference in our stored rows, push that to the list of things to notify.
+          if(value != diffProp[objId]["data"][key]){ // We have a difference in our stored rows, push that to the list of things to notify.
             diffs.push(newObj);
           }
         }
@@ -88,7 +87,7 @@ class SheetData {
     }
 
     // And now we set the new data we just collected:
-    props.setProperty("WebhookTracker_" + rangeName, JSON.stringify(newObj));
+    props.setProperty("WebhookTracker_" + rangeName, JSON.stringify(newDiffProp));
 
     return diffs;
   }
