@@ -27,7 +27,7 @@ class SheetData {
     // This would be incredibly stupid, but it's best to expect the worst.
     var keys = [];
 
-    // If we don't have keys, we can still use the keys array to 
+    // If we don't have keys, we can still use the keys array to store indices: 
     if(!hasKeys){
       values[0].forEach(function(row, rowIndex){
         keys[rowIndex] = rowIndex;
@@ -46,7 +46,7 @@ class SheetData {
         });
 
 
-        // If the range uses keys, we sto
+        // If the range uses keys, we store those:
         if (hasKeys){
           rangeObj[obj[keys[0]]] = obj;
         } else {
